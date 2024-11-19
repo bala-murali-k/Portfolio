@@ -1,9 +1,10 @@
-import BoilerPlate from './components/BoilerPlate/BoilerPlate.js';
+import BoilerPlate from './Components/BoilerPlate/BoilerPlate.js';
+import ThemeButton from './Components/ThemeButton/ThemeButton.js';
 
 function App() {
   return (
     <div className="App">
-      <BoilerPlate />
+      <BoilerPlate ThemeButton={<ThemeButton />} />
     </div>
   );
 }
