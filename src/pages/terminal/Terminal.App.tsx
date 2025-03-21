@@ -1,4 +1,4 @@
-import TerminalCore from './../../components/terminal/core.terminal.component.tsx'
+import TerminalCore from './../../components/terminal/core.terminal.component'
 
 function TerminalMain () {
     return (

@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import LandingMain from './terminal/Terminal.App.tsx'
-import { createTheme, ThemeProvider } from '@mui/material/styles'
+import LandingMain from './terminal/Terminal.App'
+import { createTheme, ThemeProvider, Theme } from '@mui/material/styles'
 
-const newTheme: any = createTheme({
+const newTheme: Theme = createTheme({
   typography: {
     fontFamily: "'Fira Code', monospace"
   }
@@ -14,7 +14,7 @@ function App() {
     <ThemeProvider theme={newTheme}>
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingMain />} />
+          <Route path="/Portfolio" element={<LandingMain />} />
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
