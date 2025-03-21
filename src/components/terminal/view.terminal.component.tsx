@@ -7,7 +7,7 @@ function ViewTerminal () {
     const commandLineCurrentDir: string = '~$ '
     const terminalRef:any = React.useRef(null)
     const [terminalHistory, setTerminalHistory] = React.useState<any[]>([])
-    const [terminalCommand, setTerminalCommand] = React.useState<any[]>([])
+    const [terminalCommand, setTerminalCommand] = React.useState<string>("")
     console.log('The console command is : ', terminalCommand, terminalHistory)
 
     function handleKeyDown (event: any) {
