@@ -1,0 +1,55 @@
+{
+  "hash": "c3a66a62",
+  "configHash": "c126863e",
+  "lockfileHash": "c63cad09",
+  "browserHash": "553420c5",
+  "optimized": {
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/.pnpm/react@19.0.0/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "4f2adfcc",
+      "needsInterop": true
+    },
+    "react": {
+      "src": "../../node_modules/.pnpm/react@19.0.0/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "d6f3ae96",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/.pnpm/react-dom@19.0.0_react@19.0.0/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "5cdcc0fb",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/.pnpm/react-router-dom@7.4.0_react-dom@19.0.0_react@19.0.0__react@19.0.0/node_modules/react-router-dom/dist/index.mjs",
+      "file": "react-router-dom.js",
+      "fileHash": "e5498031",
+      "needsInterop": false
+    },
+    "@mui/material/styles": {
+      "src": "../../node_modules/.pnpm/@mui+material@6.4.8_@emotion+react@11.14.0_@types+react@19.0.12_react@19.0.0__@emotion+_a4e0cd0cb1089caf30d7890fc0743aee/node_modules/@mui/material/styles/index.js",
+      "file": "@mui_material_styles.js",
+      "fileHash": "ffc545c4",
+      "needsInterop": false
+    },
+    "@mui/material": {
+      "src": "../../node_modules/.pnpm/@mui+material@6.4.8_@emotion+react@11.14.0_@types+react@19.0.12_react@19.0.0__@emotion+_a4e0cd0cb1089caf30d7890fc0743aee/node_modules/@mui/material/index.js",
+      "file": "@mui_material.js",
+      "fileHash": "42d5827f",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-HCKAXUWO": {
+      "file": "chunk-HCKAXUWO.js"
+    },
+    "chunk-2WJXE5LW": {
+      "file": "chunk-2WJXE5LW.js"
+    },
+    "chunk-4QYC6N4V": {
+      "file": "chunk-4QYC6N4V.js"
+    }
+  }
+}
