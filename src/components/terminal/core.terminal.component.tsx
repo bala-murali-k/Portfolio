@@ -40,7 +40,7 @@ function TerminalCore () {
             return;
         }
         if (command === 'whoami') {
-            setTerminalHistory(previous => [...previous, {
+            setTerminalHistory((previous: any) => [...previous, {
                 prefix: commandLinePrefix,
                 directory: commandLineCurrentDir,
                 command: "balamurali",
@@ -69,7 +69,7 @@ function TerminalCore () {
             inputFunction={{
                 handleTerminalHistory: (state: any) => setTerminalHistory(state),
                 handleTerminalCommand: (state: any) => setTerminalCommand(state),
-                handleKeyDown: (event: any) => handleKeyDown(event),
+//                 handleKeyDown: (event: any) => handleKeyDown(event),
                 handlePrefix: (state: any) => setPrefixEnabled(() => (state)),
                 handleCommandFunctionality: (recievedInput: string) => commandExecutioner(recievedInput),
                 handleTerminalPersistHistory: (recievedData: any) => setTerminalPersistHistory(recievedData),
