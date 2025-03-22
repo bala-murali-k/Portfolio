@@ -9,13 +9,13 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
 
     React.useEffect(() => {
         if (inputData?.prefixEnabled) {
-            inputFunction?.handleTerminalHistory([...inputData?.terminalHistory, {
+            inputFunction?.handleTerminalHistory(previous => [...previous, {
                 prefix: inputData?.commandLinePrefix,
                 directory: inputData?.commandLineCurrentDir,
                 command: inputData?.terminalCommand,
                 isPrefixEnabled: inputData?.prefixEnabled
             }])
-            inputFunction?.handleTerminalPersistHistory([...inputData?.terminalPersistHistory, {
+            inputFunction?.handleTerminalPersistHistory(previous => [...previous, {
                 prefix: inputData?.commandLinePrefix,
                 directory: inputData?.commandLineCurrentDir,
                 command: inputData?.terminalCommand,
@@ -95,8 +95,9 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
                         sx={{
                             backgroundColor: 'white',
                             zIndex: 10,
-                            height: '100%',
-                            width: '2px',
+                            height: '1em',
+                            verticalAlign: 'baseline',
+                            width: '8px',
                             display: 'inline-block',
                             ml: 0.5,
                             mt: 1,
