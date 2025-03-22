@@ -4,18 +4,18 @@ import { Box, Typography } from '@mui/material'
 function ViewTerminal ({ inputData, inputFunction }: any) {
 
     const terminalRef:any = React.useRef(null)
-    const [isTyping, setIsTyping] = React.useState<boolean>(false)
+    // const [isTyping, setIsTyping] = React.useState<boolean>(false)
     // console.log("the log is : ", isTyping)
 
     React.useEffect(() => {
         if (inputData?.prefixEnabled) {
-            inputFunction?.handleTerminalHistory(previous => [...previous, {
+            inputFunction?.handleTerminalHistory((previous: any) => [...previous, {
                 prefix: inputData?.commandLinePrefix,
                 directory: inputData?.commandLineCurrentDir,
                 command: inputData?.terminalCommand,
                 isPrefixEnabled: inputData?.prefixEnabled
             }])
-            inputFunction?.handleTerminalPersistHistory(previous => [...previous, {
+            inputFunction?.handleTerminalPersistHistory((previous: any) => [...previous, {
                 prefix: inputData?.commandLinePrefix,
                 directory: inputData?.commandLineCurrentDir,
                 command: inputData?.terminalCommand,
@@ -28,8 +28,8 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
     }, [inputData?.prefixEnabled])
 
     function handleKeyDown (event: any) {
-        setIsTyping(true)
-        setTimeout(() => setIsTyping(false), 1000)
+//         setIsTyping(true)
+        // setTimeout(() => setIsTyping(false), 1000)
         switch (event.key) {
             case 'Backspace':
                 inputFunction?.handleTerminalCommand(inputData?.terminalCommand.slice(0, -1))
