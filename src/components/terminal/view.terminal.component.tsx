@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material'
 function ViewTerminal ({ inputData, inputFunction }: any) {
 
     const terminalRef:any = React.useRef(null)
+    const [consecutiveArrows, setConsecutiveArrows] = React.useState<any>({ type: null, count: 0 });
     // const [isTyping, setIsTyping] = React.useState<boolean>(false)
     // console.log("the log is : ", isTyping)
 
@@ -45,13 +46,35 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
                 break
             case 'Tab':
                 break
+            case 'ArrowUp':
+                if (consecutiveArrows.count < 0) {
+                    return;
+                } else {
+                    setConsecutiveArrows((previous) => ({type: 'ArrowUp', count: previous.count + 1}));
+                    // setConsecutiveArrows({type: null, count: 0})
+                }
+                inputFunction?.handleTerminalCommand((previous) => inputData?.terminalPersistHistory[(inputData?.terminalPersistHistory?.length - 1) - consecutiveArrows.count]?.command);
+                break
+            case 'ArrowDown':
+                setConsecutiveArrows((previous) => ({type: 'ArrowDown', count: previous.count - 1}));
+                // else setConsecutiveArrows({type: null, count: 0});
+                inputFunction?.handleTerminalCommand((previous) => inputData?.terminalPersistHistory[consecutiveArrows.count]?.command);
+                break
+            // case 'ArrowUp':
+            //     if (consecutiveArrows.type === 'ArrowUp' || consecutiveArrows.type === null) setConsecutiveArrows({type: 'ArrowUp', count: consecutiveArrows.count + 1});
+            //     inputFunction?.handleTerminalCommand((previous) => inputData?.terminalPersistHistory[consecutiveArrows]?.command);
+            //     break
+            // case 'ArrowUp':
+            //     if (consecutiveArrows.type === 'ArrowUp' || consecutiveArrows.type === null) setConsecutiveArrows({type: 'ArrowUp', count: consecutiveArrows.count + 1});
+            //     inputFunction?.handleTerminalCommand((previous) => inputData?.terminalPersistHistory[consecutiveArrows]?.command);
+            //     break
             default:
                 inputFunction?.handleTerminalCommand(inputData?.terminalCommand + event.key)
                 break
         }
-        // console.log('The key pressed is : ', event.key, inputData?.prefixEnabled)
         // setIsTyping(false)
     }
+        console.log('The key pressed is : ', consecutiveArrows.count)
 
     React.useEffect(() => {
         if (terminalRef.current) {
@@ -65,59 +88,63 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
                 {inputData?.terminalHistory?.map((sessionHistory: any, index: number) => {
                     return (
                         <Box key={index} sx={{ display: 'block', pl: 1, mb: 0, pb: 0 }} >
-                            {sessionHistory?.isPrefixEnabled && 
-                                <>
-                                    <Typography sx={{ color: 'green', display: 'inline-block' }} >
-                                        {sessionHistory?.prefix}
-                                    </Typography>
-                                    <Typography sx={{ color: 'royalBlue', display: 'inline-block' }} >
-                                        { sessionHistory?.directory }
-                                    </Typography>
-                                </>
-                            }
-                            <Typography sx={{ color: 'darkGreen', display: 'inline-block', ml: sessionHistory?.isPrefixEnabled ? 2 : 0 }} >
-                                { sessionHistory?.command }
-                            </Typography>
+                            <Box sx={{ display: 'flex', pl: 1, alignItems: 'center' }} >
+                                {sessionHistory?.isPrefixEnabled && 
+                                    <>
+                                        <Typography sx={{ color: 'green', display: 'inline-block' }} >
+                                            {sessionHistory?.prefix}
+                                        </Typography>
+                                        <Typography sx={{ color: 'royalBlue', display: 'inline-block' }} >
+                                            { sessionHistory?.directory }
+                                        </Typography>
+                                    </>
+                                }
+                                <Typography sx={{ color: 'darkGreen', display: 'inline-block', ml: sessionHistory?.isPrefixEnabled ? 2 : 0 }} >
+                                    { sessionHistory?.command?.toString() }
+                                </Typography>
+                            </Box>
                         </Box>
                     )
                 })}
-                <Box sx={{ display: 'block', pl: 1, }} >
-                    <Typography sx={{ color: 'green', display: 'inline-block' }} >
-                        {inputData?.commandLinePrefix}
-                    </Typography>
-                    <Typography sx={{ color: 'royalBlue', display: 'inline-block' }} >
-                        { inputData?.commandLineCurrentDir }
-                    </Typography>
-                    <Typography sx={{ color: 'darkGreen', display: 'inline-block', ml: 2 }} >
-                        { inputData?.terminalCommand }
-                    </Typography>
-                    <Box component='span'
-                        sx={{
-                            backgroundColor: 'white',
-                            zIndex: 10,
-                            height: '1em',
-                            verticalAlign: 'baseline',
-                            width: '8px',
-                            display: 'inline-block',
-                            ml: 0.5,
-                            mt: 1,
-                            animation: 'blink 1s steps(2, start) infinite',
-                            '@keyframes blink': {
-                                '0%': { opacity: 1 },
-                                '10%': { opacity: 0.8 },
-                                '20%': { opacity: 0.6 },
-                                '30%': { opacity: 0.4 },
-                                '40%': { opacity: 0.2 },
-                                '50%': { opacity: 0 },
-                                '60%': { opacity: 0.2 },
-                                '70%': { opacity: 0.4 },
-                                '80%': { opacity: 0.6 },
-                                '90%': { opacity: 0.8 },
-                                '100%': { opacity: 1 },
-                            },
-                            // opacity: isTyping && 1
-                        }}
-                    />
+                <Box sx={{ display: 'block', pl: 1, justifyContent: 'center' }} >
+                    <Box sx={{ display: 'flex', pl: 1, alignItems: 'center' }} >
+                        <Typography sx={{ color: 'green', display: 'inline-block' }} >
+                            {inputData?.commandLinePrefix}
+                        </Typography>
+                        <Typography sx={{ color: 'royalBlue', display: 'inline-block' }} >
+                            { inputData?.commandLineCurrentDir }
+                        </Typography>
+                        <Typography sx={{ color: 'darkGreen', display: 'inline-block', ml: 2 }} >
+                            { inputData?.terminalCommand }
+                        </Typography>
+                        <Box component='span'
+                            sx={{
+                                backgroundColor: 'white',
+                                zIndex: 10,
+                                height: '1em',
+                                verticalAlign: 'baseline',
+                                width: '8px',
+                                display: 'inline-block',
+                                // ml: 0.5,
+                                // mt: 1,
+                                animation: 'blink 1s steps(2, start) infinite',
+                                '@keyframes blink': {
+                                    '0%': { opacity: 1 },
+                                    '10%': { opacity: 0.8 },
+                                    '20%': { opacity: 0.6 },
+                                    '30%': { opacity: 0.4 },
+                                    '40%': { opacity: 0.2 },
+                                    '50%': { opacity: 0 },
+                                    '60%': { opacity: 0.2 },
+                                    '70%': { opacity: 0.4 },
+                                    '80%': { opacity: 0.6 },
+                                    '90%': { opacity: 0.8 },
+                                    '100%': { opacity: 1 },
+                                },
+                                // opacity: isTyping && 1
+                            }}
+                        />
+                    </Box>
                 </Box>
             </Box>
         </Box>

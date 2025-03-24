@@ -5,7 +5,7 @@ function TerminalCore () {
 
     const commandLinePrefix: string = 'balamurali@temproary:'
     const commandLineCurrentDir: string = '~$ '
-    const availableCommands: any[] = ['whoami', 'clear']
+    const availableCommands: any[] = ['whoami', 'clear', 'pwd']
     const [prefixEnabled, setPrefixEnabled] = React.useState<boolean>(false)
     const [terminalPersistHistory, setTerminalPersistHistory] = React.useState<any[]>([])
     const [terminalHistory, setTerminalHistory] = React.useState<any[]>([
@@ -47,8 +47,17 @@ function TerminalCore () {
                 isPrefixEnabled: false
             }]);
         }
+
+        if (command === 'pwd') {
+            setTerminalHistory((previous: any) => [...previous, {
+                prefix: commandLinePrefix,
+                directory: commandLineCurrentDir,
+                command: "/home/balamurali/~",
+                isPrefixEnabled: false
+            }]);
+        }
     }
-    console.log('The console command is : ', terminalCommand, terminalHistory, prefixEnabled)
+    // console.log('The console command is : ', terminalCommand, terminalHistory, prefixEnabled)
 
     // React.useEffect(() => {
     //     setTerminalPersistHistory([...terminalPersistHistory, terminalHistory])
