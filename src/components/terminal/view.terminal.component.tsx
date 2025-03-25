@@ -4,9 +4,17 @@ import { Box, Typography } from '@mui/material'
 function ViewTerminal ({ inputData, inputFunction }: any) {
 
     const terminalRef:any = React.useRef(null)
-    const [consecutiveArrows, setConsecutiveArrows] = React.useState<any>({ type: null, count: 0 });
-    // const [isTyping, setIsTyping] = React.useState<boolean>(false)
-    // console.log("the log is : ", isTyping)
+    const [consecutiveArrows, setConsecutiveArrows] = React.useState<any>({ type: null, count: 0, command: "" });
+
+    React.useEffect(() => {
+        inputFunction.handleTerminalCommand(consecutiveArrows.command)
+    }, [consecutiveArrows])
+
+    React.useEffect(() => {
+        if (terminalRef.current) {
+            terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+        }
+    }, [inputData.terminalHistory])
 
     React.useEffect(() => {
         if (inputData?.prefixEnabled) {
@@ -29,8 +37,7 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
     }, [inputData?.prefixEnabled])
 
     function handleKeyDown (event: any) {
-//         setIsTyping(true)
-        // setTimeout(() => setIsTyping(false), 1000)
+        if (event.key !== 'ArrowUp' && event.key !== 'ArrowDown' && consecutiveArrows.type !== null) setConsecutiveArrows({ type: null, count: 0, command: "" })
         switch (event.key) {
             case 'Backspace':
                 inputFunction?.handleTerminalCommand(inputData?.terminalCommand.slice(0, -1))
@@ -47,18 +54,34 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
             case 'Tab':
                 break
             case 'ArrowUp':
-                if (consecutiveArrows.count < 0) {
-                    return;
-                } else {
-                    setConsecutiveArrows((previous) => ({type: 'ArrowUp', count: previous.count + 1}));
-                    // setConsecutiveArrows({type: null, count: 0})
-                }
-                inputFunction?.handleTerminalCommand((previous) => inputData?.terminalPersistHistory[(inputData?.terminalPersistHistory?.length - 1) - consecutiveArrows.count]?.command);
+                setConsecutiveArrows((previous: any) => {
+                    let newCount: number;
+                    let commandUp: string;
+                    if (previous.type === null) {
+                        newCount = inputData?.terminalPersistHistory?.length - 1
+                    } else if (previous.count <= 0) {
+                        newCount = 0
+                    } else {
+                        newCount = previous.count - 1
+                    }
+                    commandUp = inputData?.terminalPersistHistory[newCount]?.command
+                    return { type: 'ArrowUp', count: newCount, command: commandUp }
+                })
                 break
             case 'ArrowDown':
-                setConsecutiveArrows((previous) => ({type: 'ArrowDown', count: previous.count - 1}));
-                // else setConsecutiveArrows({type: null, count: 0});
-                inputFunction?.handleTerminalCommand((previous) => inputData?.terminalPersistHistory[consecutiveArrows.count]?.command);
+                setConsecutiveArrows((previous: any) => {
+                    let newCount: number;
+                    let commandUp: string;
+                    if (previous.count >= inputData?.terminalPersistHistory?.length - 1) {
+                        newCount = previous.count;
+                    } else if (previous.count < inputData?.terminalPersistHistory?.length - 1) {
+                        newCount = previous.count + 1;
+                    } else {
+                        newCount = 0;
+                    }
+                    commandUp = newCount ? inputData?.terminalPersistHistory[newCount]?.command : previous.command
+                    return {type: 'ArrowDown', count: newCount, command: commandUp}
+                })
                 break
             // case 'ArrowUp':
             //     if (consecutiveArrows.type === 'ArrowUp' || consecutiveArrows.type === null) setConsecutiveArrows({type: 'ArrowUp', count: consecutiveArrows.count + 1});
@@ -72,34 +95,37 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
                 inputFunction?.handleTerminalCommand(inputData?.terminalCommand + event.key)
                 break
         }
-        // setIsTyping(false)
     }
-        console.log('The key pressed is : ', consecutiveArrows.count)
 
     React.useEffect(() => {
         if (terminalRef.current) {
             terminalRef.current.focus()
+            terminalRef.current.scrollTop = terminalRef.current.scrollHeight
         }
     }, [])
 
+    // React.useEffect(() => {
+    //     terminalRef.current.scrollTop = terminalRef.current.scrollHeight
+    // }, [terminalRef.current.scrollTop])
+
     return (
         <Box sx={{ width: '100dvw', height: '100dvh', display: 'flex', justifyContent: 'center', alignItems: 'center' }} >
-            <Box ref={terminalRef} tabIndex={0} onKeyDown={(event) => handleKeyDown(event)} sx={{ width: '80%', height: '90%', backgroundColor: '#000' }} >
+            <Box ref={terminalRef} tabIndex={0} onKeyDown={(event) => handleKeyDown(event)} sx={{ width: '80%', height: '90%', backgroundColor: '#000', overflowY: 'auto', '&::-webkit-scrollbar': {display: 'none'}, flexDirection: 'column-reverse' }} >
                 {inputData?.terminalHistory?.map((sessionHistory: any, index: number) => {
                     return (
-                        <Box key={index} sx={{ display: 'block', pl: 1, mb: 0, pb: 0 }} >
+                        <Box key={index} sx={{ display: 'block', pl: 1, mb: 0, pb: 0, whiteSpace: 'pre-wrap' }} >
                             <Box sx={{ display: 'flex', pl: 1, alignItems: 'center' }} >
                                 {sessionHistory?.isPrefixEnabled && 
                                     <>
-                                        <Typography sx={{ color: 'green', display: 'inline-block' }} >
+                                        <Typography sx={{ color: 'green', display: 'inline-block', whiteSpace: 'inherit' }} >
                                             {sessionHistory?.prefix}
                                         </Typography>
-                                        <Typography sx={{ color: 'royalBlue', display: 'inline-block' }} >
+                                        <Typography sx={{ color: 'royalBlue', display: 'inline-block', whiteSpace: 'inherit' }} >
                                             { sessionHistory?.directory }
                                         </Typography>
                                     </>
                                 }
-                                <Typography sx={{ color: 'darkGreen', display: 'inline-block', ml: sessionHistory?.isPrefixEnabled ? 2 : 0 }} >
+                                <Typography sx={{ color: 'darkGreen', display: 'inline-block', whiteSpace: 'inherit' }} >
                                     { sessionHistory?.command?.toString() }
                                 </Typography>
                             </Box>
@@ -107,14 +133,14 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
                     )
                 })}
                 <Box sx={{ display: 'block', pl: 1, justifyContent: 'center' }} >
-                    <Box sx={{ display: 'flex', pl: 1, alignItems: 'center' }} >
-                        <Typography sx={{ color: 'green', display: 'inline-block' }} >
+                    <Box sx={{ display: 'flex', pl: 1, alignItems: 'center', whiteSpace: 'pre-wrap' }} >
+                        <Typography sx={{ color: 'green', display: 'inline-block', whiteSpace: 'inherit' }} >
                             {inputData?.commandLinePrefix}
                         </Typography>
-                        <Typography sx={{ color: 'royalBlue', display: 'inline-block' }} >
+                        <Typography sx={{ color: 'royalBlue', display: 'inline-block', whiteSpace: 'inherit' }} >
                             { inputData?.commandLineCurrentDir }
                         </Typography>
-                        <Typography sx={{ color: 'darkGreen', display: 'inline-block', ml: 2 }} >
+                        <Typography sx={{ color: 'darkGreen', display: 'inline-block', whiteSpace: 'inherit' }} >
                             { inputData?.terminalCommand }
                         </Typography>
                         <Box component='span'
