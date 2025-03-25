@@ -127,16 +127,18 @@ function cat (command: any) {
     return result
 }
 
-function whoami (command: any) {
+function whoami (command: any = "") {
+    console.log(command)
     return ['balamurali']
 }
 
-function pwd (command: any, options: any = {}) {
+function pwd (command: any = "", options: any = {}) {
+    console.log(command, options)
     return [`/home/balamurali`]
 }
 
-function history (command: any, options: any = {}) {
-    console.log("The history console is : ", options.terminalPersistHistory)
+function history (command: any = "", options: any = {}) {
+    console.log("The history console is : ", command, options)
     const result: any[] = options.terminalPersistHistory.map((historyRecord: any, index: number) => (`${index + 1} ${historyRecord.command}`))
     // return [...options.terminalPersistHistory.command]
     return result
@@ -145,6 +147,6 @@ function history (command: any, options: any = {}) {
 function echo (command: any, options: any = {}) {
     let result = command.split(' ')
     result.shift()
-    console.log("The echo result is : ", result)
+    console.log("The echo result is : ", result, options)
     return [result.join(' ')]
 }
