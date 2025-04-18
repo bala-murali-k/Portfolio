@@ -145,7 +145,7 @@ function ViewTerminal ({ inputData, inputFunction }: any) {
                         </Typography>
                         <Box component='span'
                             sx={{
-                                backgroundColor: 'grey',
+                                backgroundColor: 'white',
                                 zIndex: 10,
                                 height: '1em',
                                 verticalAlign: 'baseline',
